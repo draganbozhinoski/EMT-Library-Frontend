@@ -12,8 +12,9 @@ const AddBooks = (props) => {
         author: 1,
     })
     const [categories,setCategories] = useState({
-        categories: []
+        categories: [],
     })
+    let fetched = false;
     useEffect(() => {
         fetchCategories()
     })
@@ -25,10 +26,12 @@ const AddBooks = (props) => {
         })
     }
     const fetchCategories = () => {
-        libraryService.findAllCategories().then(data => setCategories({
-            categories:data.data
-        }))
-        console.log(categories)
+        if(!fetched) {
+            libraryService.findAllCategories().then(data => setCategories({
+                categories: data.data,
+            }))
+        }
+        fetched=true;
     }
     const submitForm = () => {
         console.log("submitted")
