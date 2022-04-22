@@ -5,7 +5,7 @@ import Header from '../../header/header'
 
 const AddBooks = (props) => {
     const history = useNavigate()
-    let updateProp = false
+    let updateProp = true
     const [formData, updateFormData] = useState({
         name: "",
         availableCopies: 0,
@@ -55,6 +55,7 @@ const AddBooks = (props) => {
                         <label htmlFor={"category"}>Choose book category: </label>
                         <select name={"category"} className={"form-control"} onChange={handleChange}>
                             {/*    category*/}
+
                         </select>
                     </div>
                     <div className={"form-group pt-2"}>
