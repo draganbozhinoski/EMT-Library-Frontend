@@ -15,9 +15,10 @@ const AddBooks = (props) => {
         categories: [],
     })
     useEffect(() => {
-        console.log("TEst");
+        console.log("Called");
         fetchCategories()
-    })
+        console.log("Categories.. ",categories)
+    },[categories])
 
     const handleChange = (e) => {
         updateFormData({
