@@ -55,7 +55,11 @@ const AddBooks = (props) => {
                         <label htmlFor={"category"}>Choose book category: </label>
                         <select name={"category"} className={"form-control"} onChange={handleChange}>
                             {/*    category*/}
-
+                            {categories.map(category => {
+                                return (
+                                    <p>{category}</p>
+                                );
+                            })}
                         </select>
                     </div>
                     <div className={"form-group pt-2"}>
