@@ -5,6 +5,7 @@ import Header from '../../header/header'
 
 const AddBooks = (props) => {
     const history = useNavigate()
+    let updateProp = false
     const [formData, updateFormData] = useState({
         name: "",
         availableCopies: 0,
@@ -18,7 +19,7 @@ const AddBooks = (props) => {
         console.log("Called");
         fetchCategories()
         console.log("Categories.. ",categories)
-    },[categories])
+    },[updateProp])
 
     const handleChange = (e) => {
         updateFormData({
