@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import libraryService from "../../../service/libraryService";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Header from '../../header/header'
+import {Link} from "react-router-dom";
 
 class Books extends Component {
     constructor(props) {
@@ -17,7 +18,7 @@ class Books extends Component {
                 <Header/>
                 <div className={"container"}>
                     <h3 className={"text-primary"}>Showing all books..</h3>
-                    <button type={"button"} className={"btn btn-success"}>Add new book</button>
+                    <Link to={"/books/add"} className={"btn btn-success"}>Add new book</Link>
                     <table className={"table"}>
                         <thead>
                         <tr>
@@ -39,7 +40,9 @@ class Books extends Component {
                                     <td>{book.category}</td>
                                     <td>{book.author.name} {book.author.surname}</td>
                                     <td>
-                                        <button className={"btn btn-primary btn-sm"}>Edit</button>
+                                        <Link to={`/books/edit/${book.id}`} className={"btn btn-primary btn-sm"}>Edit</Link>
+                                        {/*<button className={"btn btn-primary btn-sm"}*/}
+                                        {/*        onClick={() => this.editBook(book.id)}>Edit</button>*/}
                                         -
                                         <button className={"btn btn-danger btn-sm"}
                                                 onClick={() => this.deleteBook(book.id)}>Delete</button>-
@@ -76,6 +79,9 @@ class Books extends Component {
     }
     deleteBook = (id) => {
         libraryService.deleteBook(id).then(() => this.loadBooks());
+    }
+    editBook = (id) => {
+        libraryService.editBook(id)
     }
 }
 

@@ -5,21 +5,25 @@ import Header from '../../header/header'
 
 const AddBooks = (props) => {
     const history = useNavigate()
-    let updateProp = true
+    const [page,setPage] = useState(0)
     const [formData, updateFormData] = useState({
         name: "",
         availableCopies: 0,
         category: "NOVEL",
         author: 1,
     })
-    const [categories, setCategories] = useState({
-        categories: [],
-    })
+
+    const [categories, setCategories] = useState([])
+    const [authors,setAuthors] = useState([])
+
     useEffect(() => {
-        console.log("Called");
+        fetchAuthors()
+            .then(res => setAuthors(res.data))
+            .catch(err => console.log(err))
         fetchCategories()
-        console.log("Categories.. ",categories)
-    },[updateProp])
+            .then(res => setCategories(res.data))
+            .catch(err => console.log(err));
+    },[page])
 
     const handleChange = (e) => {
         updateFormData({
@@ -28,17 +32,19 @@ const AddBooks = (props) => {
         })
     }
     const fetchCategories = () => {
-        libraryService.findAllCategories().then(data => setCategories({
-            categories: data.data,
-        }))
+        return libraryService.findAllCategories()
+    }
+    const fetchAuthors = () => {
+        return libraryService.findAllAuthors()
     }
     const submitForm = () => {
-        console.log("submitted")
+        libraryService.saveBook(formData.name,formData.availableCopies,formData.category,formData.author)
+        history("/books")
     }
-
     return (
         <main>
             <Header/>
+
             <div className={"container w-25 mx-auto pt-4"}>
                 <form onSubmit={submitForm}>
                     <div className={"form-group pt-2"}>
@@ -48,24 +54,28 @@ const AddBooks = (props) => {
                     </div>
                     <div className={"form-group pt-2"}>
                         <label htmlFor={"availableCopies"}>Enter available copies: </label>
-                        <input className={"form-control"} name="availableCopies" type={"text"} onChange={handleChange}
+                        <input className={"form-control"} name="availableCopies" type={"number"} onChange={handleChange}
                                placeholder={"Enter initial available copies.."} required/>
                     </div>
                     <div className={"form-group pt-2"}>
                         <label htmlFor={"category"}>Choose book category: </label>
                         <select name={"category"} className={"form-control"} onChange={handleChange}>
-                            {/*    category*/}
-                            {categories.map(category => {
-                                return (
-                                    <p>{category}</p>
+                            {categories.map(cat => {
+                                return(
+                                    <option value={cat}>{cat}</option>
                                 );
-                            })}
+                            })
+                            }
                         </select>
                     </div>
                     <div className={"form-group pt-2"}>
                         <label htmlFor={"author"}>Choose book author: </label>
                         <select name={"author"} className={"form-control"} onChange={handleChange}>
-                            {/*author*/}
+                            {authors.map(author => {
+                                return(
+                                    <option value={author.id}>{author.name} {author.surname}</option>
+                                );
+                            })}
                         </select>
                     </div>
                     <div className={"pt-2 mx-auto w-50"}>
