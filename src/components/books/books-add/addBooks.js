@@ -38,7 +38,7 @@ const AddBooks = (props) => {
         return libraryService.findAllAuthors()
     }
     const submitForm = () => {
-        libraryService.saveBook(formData.name,formData.availableCopies,formData.category,formData.author).then(() => history('/books'))
+        libraryService.saveBook(formData.name,formData.availableCopies,formData.category,formData.author)
         history("/books")
     }
     return (

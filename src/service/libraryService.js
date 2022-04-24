@@ -17,12 +17,12 @@ const libraryService = {
         return axios.delete(`/api/books/${id}/delete`)
     },
     saveBook: (name,availableCopies,category,author) => {
-        return axios.post(`/api/books/save`, {
+        axios.post(`/api/books/save`, {
             "name": name,
             "availableCopies": availableCopies,
             "category": category,
             "author": author
-        })
+        }).then(r => console.log(r))
     },
     updateBook: (id,name,availableCopies,category,author) => {
         axios.put(`/api/books/${id}/update`, {
