@@ -3,20 +3,34 @@ import libraryService from "../../../service/libraryService";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Header from '../../header/header'
 import {Link} from "react-router-dom";
+import ReactPaginate from "react-paginate";
+
 
 class Books extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            books: []
+            books: [],
+            page:0,
+            size:5
         }
     }
 
     render() {
+        const offset = this.state.page * this.state.size
+        const pageCount = Math.ceil(this.state.books.length / this.state.size)
+        const endPage = offset+this.state.size
+        const booksPaginated = this.state.books.slice(offset,endPage)
+        // console.log(booksPaginated)
         return (
             <main>
                 <Header/>
                 <div className={"container"}>
+                    {/*{booksPaginated.map(book => {*/}
+                    {/*    return(*/}
+                    {/*        <div>{book.name}</div>*/}
+                    {/*        );*/}
+                    {/*})}*/}
                     <h3 className={"text-primary"}>Showing all books..</h3>
                     <Link to={"/books/add"} className={"btn btn-success"}>Add new book</Link>
                     <table className={"table"}>
@@ -31,7 +45,7 @@ class Books extends Component {
                         </tr>
                         </thead>
                         <tbody>
-                        {this.state.books.map(book => {
+                        {booksPaginated.map(book => {
                             return (
                                 <tr>
                                     <th scope={"row"}>{book.id}</th>
@@ -54,6 +68,23 @@ class Books extends Component {
                         })}
                         </tbody>
                     </table>
+                    <ReactPaginate pageCount={pageCount}
+                        onPageChange={this.pageChange}
+                                   breakLabel={"..."}
+                                   renderOnZeroPageCount={null}
+                                   previousLabel={"< previous"}
+                                   pageClassName={"ml-1"}
+                                   pageRangeDisplayed={5}
+                                   marginPagesDisplayed={2}
+                                   containerClassName={"pagination m-2 justify-content-center"}
+                                   previousClassName={"page-item"}
+                                   nextClassName={"page-item"}
+                                   previousLinkClassName={"page-link"}
+                                   nextLinkClassName={"page-link"}
+                                   pageLinkClassName={"page-link"}
+                                   activeClassName={"active page-item"}
+                                   activeLinkClassName={"page-link"}
+                    />
                 </div>
             </main>
         )
@@ -61,6 +92,12 @@ class Books extends Component {
 
     componentDidMount() {
         this.fetchBooks()
+    }
+    pageChange = (data) => {
+        let selected = data.selected
+        this.setState({
+            page:selected
+        })
     }
 
     fetchBooks = () => {
@@ -72,16 +109,13 @@ class Books extends Component {
                 this.setState({
                     books: data.data
                 })
-            )
+            ).then(() => console.log(this.state.books))
     }
     takeBook = (id) => {
         libraryService.takeBook(id).then(() => this.loadBooks());
     }
     deleteBook = (id) => {
         libraryService.deleteBook(id).then(() => this.loadBooks());
-    }
-    editBook = (id) => {
-        libraryService.editBook(id)
     }
 }
 

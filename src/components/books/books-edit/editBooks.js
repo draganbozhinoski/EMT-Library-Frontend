@@ -98,7 +98,7 @@ const EditBooks = (props) => {
                     </div>
                     }
                     {isLoadingAuthors && <div>Loading authors..</div>}
-                    {!isLoadingAuthors &&
+                    {!isLoadingAuthors && selectedBook.author != null &&
                     <div className={"form-group pt-2"}>
                         <label htmlFor={"author"}>Choose book author: </label>
                         <select name={"author"} className={"form-control"} onChange={handleChange} defaultValue={selectedBook.author.id}>
